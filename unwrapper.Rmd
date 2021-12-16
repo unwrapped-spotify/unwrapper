@@ -1,11 +1,21 @@
+---
+title: "Example page"
+output: html_document
+---
+
+```{r setup, echo = FALSE, include = FALSE}
 # Load libraries
 library(dplyr)            # Data frame operations
 library(jsonlite)         # JSON operations
 library(janitor)          # Cleaning operations
+```
 
+```{r load-data, echo = FALSE, include = FALSE}
 # Load streaming data
 
-list.files("data", full.names = TRUE) %>%
+streaming_data <- list.files("data", full.names = TRUE) %>%
   lapply(function(filename) {fromJSON(txt = filename) %>% as_tibble}) %>%
   bind_rows %>%
   clean_names
+```
+
