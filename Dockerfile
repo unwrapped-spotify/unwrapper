@@ -7,4 +7,4 @@ RUN R -e "install.packages(readLines('/requirements.txt', warn = F))"
 COPY unwrapper.Rmd /src/unwrapper.Rmd
 COPY data.json /src/data.json
 WORKDIR /src
-CMD ["R", "-e", "rmarkdown::render(input = 'unwrapper.Rmd', output_file = 'output.html')"]
+CMD ["R", "-e", "rmarkdown::render(input = 'unwrapper.Rmd', output_file = '/src/output.html')"]
