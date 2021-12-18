@@ -15,7 +15,7 @@ library(ggplot2)          # Plotting operations
 ```{r load-data, echo = FALSE, include = FALSE}
 # Load streaming data
 
-streaming_data <- fromJSON(txt = "/workspace/data.json") %>% as_tibble
+streaming_data <- fromJSON(txt = "data.json") %>% as_tibble
 
 #streaming_data <- list.files("data", full.names = TRUE) %>%
 #  lapply(function(filename) {fromJSON(txt = filename) %>% as_tibble}) %>%
