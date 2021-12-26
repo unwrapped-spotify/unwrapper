@@ -17,10 +17,13 @@ library(ggplot2)          # Plotting operations
 
 streaming_data <- fromJSON(txt = "data.json") %>% as_tibble %>% clean_names
 
-#streaming_data <- list.files("data", full.names = TRUE) %>%
-#  lapply(function(filename) {fromJSON(txt = filename) %>% as_tibble}) %>%
-#  bind_rows %>%
-#  clean_names
+# Cleanse data
+
+streaming_data_cleaned <- streaming_data %>% 
+  mutate(
+    end_time = as.POSIXct(end_time)
+  )
+
 ```
 
 ```{r heatmap-plot, echo = FALSE}
@@ -38,4 +41,78 @@ streaming_data %>%
   geom_line(mapping = aes(x = date, y = minutes_played))
 
 
+```
+
+```{r, echo = FALSE}
+
+streaming_data_cleaned %>% 
+  mutate(
+    hour = hour(end_time)
+  ) %>% 
+  group_by(hour) %>%
+  summarise(minutes_played = sum(ms_played) / 1000 / 60) %>%
+  ggplot() +
+  geom_line(mapping = aes(x = hour, y = minutes_played))
+
+```
+
+```{r, echo = FALSE}
+
+streaming_data_cleaned %>% 
+  .$artist_name %>% 
+  unique %>% 
+  length
+
+```
+
+```{r, echo = FALSE}
+streaming_data_cleaned %>% 
+  .$track_name %>%
+  unique %>%
+  length
+
+```
+
+```{r, echo = FALSE}
+
+streaming_data_cleaned %>% 
+  group_by(artist_name) %>% 
+  summarise(minutes_played = sum(ms_played) / 1000 / 60) %>%
+  arrange(desc(minutes_played)) %>%
+  head(20) %>% 
+  ggplot() +
+  geom_col(mapping = aes(y = reorder(artist_name, minutes_played), x = minutes_played))
+```
+
+```{r, echo = FALSE}
+
+streaming_data_cleaned %>% 
+  group_by(artist_name) %>% 
+  summarise(listens = n()) %>%
+  arrange(desc(listens)) %>%
+  head(20) %>% 
+  ggplot() +
+  geom_col(mapping = aes(y = reorder(artist_name, listens), x = listens))
+```
+
+```{r, echo = FALSE}
+
+streaming_data_cleaned %>% 
+  group_by(artist_name, track_name) %>% 
+  summarise(minutes_played = sum(ms_played) / 1000 / 60, track = first(paste(track_name, artist_name, sep = " - "))) %>%
+  arrange(desc(minutes_played)) %>%
+  head(20) %>% 
+  ggplot() +
+  geom_col(mapping = aes(y = reorder(track, minutes_played), x = minutes_played))
+```
+
+```{r, echo = FALSE}
+
+streaming_data_cleaned %>% 
+  group_by(artist_name, track_name) %>% 
+  summarise(listens = n(), track = first(paste(track_name, artist_name, sep = " - "))) %>%
+  arrange(desc(listens)) %>%
+  head(20) %>% 
+  ggplot() +
+  geom_col(mapping = aes(y = reorder(track, listens), x = listens))
 ```
