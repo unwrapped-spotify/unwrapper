@@ -10,6 +10,7 @@ library(jsonlite)         # JSON operations
 library(janitor)          # Cleaning operations
 library(lubridate)        # Date/time operations
 library(ggplot2)          # Plotting operations
+library(data.table)       # rbindlist
 ```
 
 ```{r load-data, echo = FALSE, include = FALSE}
@@ -115,4 +116,41 @@ streaming_data_cleaned %>%
   head(20) %>% 
   ggplot() +
   geom_col(mapping = aes(y = reorder(track, listens), x = listens))
+```
+
+```{r, echo = FALSE}
+
+streaming_data_cleaned %>% 
+  mutate(
+    date = as.Date(end_time),
+    hour = hour(end_time),
+  ) %>% 
+  group_by(date, hour) %>%
+  summarise(minutes_played = sum(ms_played) / 1000 / 60) %>% 
+  left_join(
+    min(as.Date(streaming_data_cleaned$end_time)):max(as.Date(streaming_data_cleaned$end_time)) %>% 
+      as.Date(origin = "1970-01-01") %>% 
+      lapply(function(x) {
+        tibble(
+          date = x,
+          hour = 0:23,
+        )
+      }) %>% 
+      rbindlist %>% 
+      as_tibble,
+    .,
+    by = c("date", "hour")
+  ) %>% 
+  mutate(
+    minutes_played = ifelse(is.na(minutes_played), 0, minutes_played)
+  ) %>% 
+  filter(month(date) == 3) %>% 
+  ggplot() +
+  #stat_density2d()
+  geom_tile(
+    mapping = aes(x = date, y = hour, fill = minutes_played)
+  )
+
+
+
 ```
