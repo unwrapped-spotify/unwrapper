@@ -11,6 +11,7 @@ library(janitor)          # Cleaning operations
 library(lubridate)        # Date/time operations
 library(ggplot2)          # Plotting operations
 library(data.table)       # rbindlist
+library(ggthemes)         # ggplot2 themes
 ```
 
 ```{r load-data, echo = FALSE, include = FALSE}
@@ -24,6 +25,8 @@ streaming_data_cleaned <- streaming_data %>%
   mutate(
     end_time = as.POSIXct(end_time)
   )
+
+colours <- c("#1DB954", "#FFFFFF", "#191414")
 
 ```
 
@@ -118,7 +121,7 @@ streaming_data_cleaned %>%
   geom_col(mapping = aes(y = reorder(track, listens), x = listens))
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.width = 15}
 
 streaming_data_cleaned %>% 
   mutate(
@@ -144,13 +147,11 @@ streaming_data_cleaned %>%
   mutate(
     minutes_played = ifelse(is.na(minutes_played), 0, minutes_played)
   ) %>% 
-  filter(month(date) == 3) %>% 
+  #filter(month(date) == 3) %>% 
   ggplot() +
   #stat_density2d()
   geom_tile(
     mapping = aes(x = date, y = hour, fill = minutes_played)
   )
-
-
 
 ```
