@@ -3,3 +3,5 @@ jsonlite
 janitor
 lubridate
 ggplot2
+data.table
+ggthemes
