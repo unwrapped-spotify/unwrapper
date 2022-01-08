@@ -1,6 +1,7 @@
 ---
-title: "Example page"
-output: html_document
+title: ""
+output: pdf_document
+classoption: landscape
 ---
 
 ```{r setup, echo = FALSE, include = FALSE}
@@ -12,9 +13,20 @@ library(lubridate)        # Date/time operations
 library(ggplot2)          # Plotting operations
 library(data.table)       # rbindlist
 library(ggthemes)         # ggplot2 themes
+
+knitr::opts_chunk$set(
+  eval = T,
+  echo = F,
+  include = F,
+  warning = F,
+  message = F,
+  error = F,
+  include = T
+  )
+
 ```
 
-```{r load-data, echo = FALSE, include = FALSE}
+```{r load-data}
 # Load streaming data
 
 streaming_data <- fromJSON(txt = "data.json") %>% as_tibble %>% clean_names
@@ -26,11 +38,20 @@ streaming_data_cleaned <- streaming_data %>%
     end_time = as.POSIXct(end_time)
   )
 
-colours <- c("#1DB954", "#FFFFFF", "#191414")
+colours <- c("#1DB954", "#1F7062", "#1D382F", "#B3E251", "#40C8B1", "#FFFFFF",
+  "#191414"
+  )
 
 ```
 
-```{r heatmap-plot, echo = FALSE}
+<!-- Title page -->
+
+```{r title-page, child = "pages/title_page.Rmd"}
+
+```
+
+
+```{r heatmap-plot}
 
 streaming_data %>%
   mutate(
@@ -47,7 +68,7 @@ streaming_data %>%
 
 ```
 
-```{r, echo = FALSE}
+```{r}
 
 streaming_data_cleaned %>% 
   mutate(
@@ -60,7 +81,7 @@ streaming_data_cleaned %>%
 
 ```
 
-```{r, echo = FALSE}
+```{r}
 
 streaming_data_cleaned %>% 
   .$artist_name %>% 
@@ -69,7 +90,7 @@ streaming_data_cleaned %>%
 
 ```
 
-```{r, echo = FALSE}
+```{r}
 streaming_data_cleaned %>% 
   .$track_name %>%
   unique %>%
@@ -77,7 +98,7 @@ streaming_data_cleaned %>%
 
 ```
 
-```{r, echo = FALSE}
+```{r}
 
 streaming_data_cleaned %>% 
   group_by(artist_name) %>% 
@@ -88,7 +109,7 @@ streaming_data_cleaned %>%
   geom_col(mapping = aes(y = reorder(artist_name, minutes_played), x = minutes_played))
 ```
 
-```{r, echo = FALSE}
+```{r}
 
 streaming_data_cleaned %>% 
   group_by(artist_name) %>% 
@@ -99,7 +120,7 @@ streaming_data_cleaned %>%
   geom_col(mapping = aes(y = reorder(artist_name, listens), x = listens))
 ```
 
-```{r, echo = FALSE}
+```{r}
 
 streaming_data_cleaned %>% 
   group_by(artist_name, track_name) %>% 
@@ -110,7 +131,7 @@ streaming_data_cleaned %>%
   geom_col(mapping = aes(y = reorder(track, minutes_played), x = minutes_played))
 ```
 
-```{r, echo = FALSE}
+```{r}
 
 streaming_data_cleaned %>% 
   group_by(artist_name, track_name) %>% 
@@ -121,7 +142,7 @@ streaming_data_cleaned %>%
   geom_col(mapping = aes(y = reorder(track, listens), x = listens))
 ```
 
-```{r, echo = FALSE, fig.width = 15}
+```{r fig.width = 15}
 
 streaming_data_cleaned %>% 
   mutate(
