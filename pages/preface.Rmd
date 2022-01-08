@@ -1,9 +1,10 @@
 \begin{center}
+\section{Preface}
 \Large{Preface}
 \begin{itemize}
-\item This report uses data submitted by **email here** to **unwrappedspotify.com**.
+\item This report uses data submitted by \textbf{email here} to \textbf{unwrappedspotify.com}.
 \item The data submitted ranges from `r min(streaming_data_cleaned$end_time) %>% as.Date` to `r max(streaming_data_cleaned$end_time) %>% as.Date`.
-\item Please report any issues, improvements, or suggestions to **email here**.
+\item Please report any issues, improvements, or suggestions to \textbf{email here}.
 \end{itemize}
 \end{center}
 \newpage

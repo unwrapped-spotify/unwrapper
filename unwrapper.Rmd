@@ -3,7 +3,6 @@ title: ""
 output: pdf_document
 classoption: landscape
 ---
-
 ```{r setup, echo = FALSE, include = FALSE}
 # Load libraries
 library(dplyr)            # Data frame operations
@@ -47,6 +46,10 @@ colours <- c("#1DB954", "#1F7062", "#1D382F", "#B3E251", "#40C8B1", "#FFFFFF",
 <!-- Title page -->
 
 ```{r title-page, child = "pages/title_page.Rmd"}
+```
+
+<!-- Table of contents -->
+```{r toc, child = "pages/toc.Rmd"}
 ```
 
 <!-- Preface -->
