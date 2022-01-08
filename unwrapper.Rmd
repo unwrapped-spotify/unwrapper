@@ -47,7 +47,10 @@ colours <- c("#1DB954", "#1F7062", "#1D382F", "#B3E251", "#40C8B1", "#FFFFFF",
 <!-- Title page -->
 
 ```{r title-page, child = "pages/title_page.Rmd"}
+```
 
+<!-- Preface -->
+```{r preface, child = "pages/preface.Rmd"}
 ```
 
 
