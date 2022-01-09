@@ -1,5 +1,9 @@
 ---
 title: ""
+header-includes:
+  - \usepackage[T1]{fontenc}
+  - \usepackage[scaled]{berasans}
+  - \renewcommand*\familydefault{\sfdefault}
 output: pdf_document
 classoption: landscape
 ---
@@ -12,6 +16,8 @@ library(lubridate)        # Date/time operations
 library(ggplot2)          # Plotting operations
 library(data.table)       # rbindlist
 library(ggthemes)         # ggplot2 themes
+
+source("functions.R")
 
 knitr::opts_chunk$set(
   eval = T,
