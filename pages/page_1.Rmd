@@ -1,0 +1,79 @@
+```{r heatmap-plot}
+
+# streaming_data %>%
+#   mutate(week = week(end_time)) %>% 
+#   group_by(week) %>%
+#   summarise(
+#     minutes_played = sum(ms_played) / 1000 / 60,
+#     hours_played = minutes_played / 60,
+#     end_date = min(end_date)) %>%
+#   ggplot() +
+#   geom_line(mapping = aes(x = end_date, y = hours_played)) +
+#   theme_calc() +
+#   labs(
+#     x = "",
+#     y = "Hours played",
+#   )
+
+streaming_data_by_day <- streaming_data %>%
+  mutate(week = week(end_time)) %>% 
+  group_by(end_date) %>%
+  summarise(
+    minutes_played = sum(ms_played) / 1000 / 60,
+    hours_played = minutes_played / 60,
+    end_date = min(end_date))
+
+plot <- streaming_data_by_day %>% 
+  ggplot() +
+  geom_point(mapping = aes(x = end_date, y = hours_played)) +
+  geom_smooth(
+    method = "loess",
+    formula = y ~ poly(x, 2),
+    na.rm = T,
+    colour = colours[1],
+    fill = NA,
+    mapping = aes(x = end_date, y = hours_played)) +
+  theme_calc() +
+  labs(
+    x = "",
+    y = "Hours played",
+  ) +
+  theme(panel.border = element_blank())
+
+temp <- tempfile("plot", fileext = ".png")
+
+streaming_data_min <- streaming_data$end_time %>% min() %>% as.Date
+streaming_data_max <- streaming_data$end_time %>% max() %>% as.Date
+
+total_mins <- streaming_data_by_day$minutes_played %>% sum
+
+total_hours_per_day <- total_mins / 60 / nrow(streaming_data_by_day)
+
+proportion_time_listened <- total_mins / (nrow(streaming_data_by_day) * 60 * 24)
+
+max_day <- streaming_data_by_day %>%
+  filter(minutes_played == max(minutes_played))
+
+min_day <- streaming_data_by_day %>%
+  filter(minutes_played == min(minutes_played))
+
+ggsave(plot, filename = temp, width = 5, height = 3) %>% 
+  suppressWarnings()
+
+```
+
+\section{Streaming data}
+
+\begin{wrapfigure}[12]{r}{0.55\textwidth}
+  \includegraphics[width=0.55\textwidth]{`r gsub("\\\\", "/", temp)`}
+\end{wrapfigure}
+
+Between `r streaming_data_min` and `r streaming_data_max`, you listened to `r total_mins %>% round %>% comma()` minutes of spotify. The average number of hours played per day is `r total_hours_per_day %>% round(1)`. This means you spent `r proportion_time_listened %>% percent` of your time listening to Spotify.
+
+You listened to the most music on `r max_day$end_date`, where you listened to `r max_day$minutes_played %>% round` minutes (`r max_day$hours_played %>% round(1)` hours)
+
+You listened to the least on `r min_day$end_date`, where you listened to `r min_day$minutes_played %>% round` minutes (`r min_day$hours_played %>% round(1)` hours)
+
+
+
+\newpage

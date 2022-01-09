@@ -3,6 +3,7 @@ title: ""
 header-includes:
   - \usepackage[T1]{fontenc}
   - \usepackage[scaled]{berasans}
+  - \usepackage{wrapfig}
   - \renewcommand*\familydefault{\sfdefault}
 output: pdf_document
 fontsize: 12pt
@@ -17,6 +18,7 @@ library(lubridate)        # Date/time operations
 library(ggplot2)          # Plotting operations
 library(data.table)       # rbindlist
 library(ggthemes)         # ggplot2 themes
+library(scales)           # scaling numbers
 
 knitr::opts_chunk$set(
   eval = T,
@@ -34,7 +36,13 @@ knitr::opts_chunk$set(
 ```{r load-data}
 # Load streaming data
 
-streaming_data <- fromJSON(txt = "data.json") %>% as_tibble %>% clean_names
+streaming_data <- fromJSON(txt = "data.json") %>%
+  as_tibble %>%
+  clean_names %>% 
+  mutate(
+    end_time = as.POSIXct(end_time),
+    end_date = as.Date(end_time)
+  )
 
 # Cleanse data
 
@@ -62,23 +70,10 @@ colours <- c("#1DB954", "#1F7062", "#1D382F", "#B3E251", "#40C8B1", "#FFFFFF",
 ```{r preface, child = "pages/preface.Rmd"}
 ```
 
-
-```{r heatmap-plot}
-
-streaming_data %>%
-  mutate(
-    datetime = as.POSIXct(end_time),
-    date = as.Date(datetime),
-    week = week(datetime),
-    hour = hour(datetime),
-  ) %>%
-  group_by(week) %>%
-  summarise(minutes_played = sum(ms_played) / 1000 / 60, date = min(date)) %>%
-  ggplot() +
-  geom_line(mapping = aes(x = date, y = minutes_played))
-
-
+<!-- page 1 -->
+```{r page-1, child = "pages/page_1.Rmd"}
 ```
+
 
 ```{r}
 
