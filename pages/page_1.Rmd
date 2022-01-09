@@ -64,9 +64,9 @@ ggsave(plot, filename = temp, width = 5, height = 3) %>%
 
 \section{Streaming data}
 
-\begin{wrapfigure}[12]{r}{0.55\textwidth}
-  \includegraphics[width=0.55\textwidth]{`r gsub("\\\\", "/", temp)`}
-\end{wrapfigure}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{`r gsub("\\\\", "/", temp)`}
+\end{center}
 
 Between `r streaming_data_min` and `r streaming_data_max`, you listened to `r total_mins %>% round %>% comma()` minutes of spotify. The average number of hours played per day is `r total_hours_per_day %>% round(1)`. This means you spent `r proportion_time_listened %>% percent` of your time listening to Spotify.
 
