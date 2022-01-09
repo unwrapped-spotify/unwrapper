@@ -5,7 +5,8 @@ header-includes:
   - \usepackage[scaled]{berasans}
   - \renewcommand*\familydefault{\sfdefault}
 output: pdf_document
-classoption: landscape
+fontsize: 12pt
+classoption: [landscape]
 ---
 ```{r setup, echo = FALSE, include = FALSE}
 # Load libraries
@@ -17,8 +18,6 @@ library(ggplot2)          # Plotting operations
 library(data.table)       # rbindlist
 library(ggthemes)         # ggplot2 themes
 
-source("functions.R")
-
 knitr::opts_chunk$set(
   eval = T,
   echo = F,
@@ -28,6 +27,7 @@ knitr::opts_chunk$set(
   error = F,
   include = T
   )
+
 
 ```
 

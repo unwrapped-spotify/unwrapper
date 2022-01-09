@@ -1,8 +1,14 @@
+```{r}
+streaming_data_min <- streaming_data_cleaned$end_time %>% min() %>% as.Date
+streaming_data_max <- streaming_data_cleaned$end_time %>% max() %>% as.Date
+```
+
+
 \begin{center}
 \section{Preface}
 \begin{itemize}
 \item This report uses data submitted by \textbf{email here} to \textbf{unwrappedspotify.com}.
-\item The data submitted ranges from `r streaming_data_min()` to `r streaming_data_max()`.
+\item The data submitted ranges from `r streaming_data_min` to `r streaming_data_max`.
 \item Please report any issues, improvements, or suggestions to \textbf{email here}.
 \end{itemize}
 \end{center}
