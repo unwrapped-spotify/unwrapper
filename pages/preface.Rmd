@@ -1,6 +1,6 @@
 ```{r}
-streaming_data_min <- streaming_data_cleaned$end_time %>% min() %>% as.Date
-streaming_data_max <- streaming_data_cleaned$end_time %>% max() %>% as.Date
+streaming_data_min <- streaming_data$end_time %>% min() %>% as.Date
+streaming_data_max <- streaming_data$end_time %>% max() %>% as.Date
 ```
 
 
