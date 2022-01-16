@@ -19,6 +19,7 @@ library(ggplot2)          # Plotting operations
 library(data.table)       # rbindlist
 library(ggthemes)         # ggplot2 themes
 library(scales)           # scaling numbers
+library(tools)            # file_ext function
 
 knitr::opts_chunk$set(
   eval = T,
@@ -36,8 +37,12 @@ knitr::opts_chunk$set(
 ```{r load-data}
 # Load streaming data
 
-streaming_data <- fromJSON(txt = "data.json") %>%
-  as_tibble %>%
+streaming_data <- list.files("data/") %>% 
+  .[file_ext(.) == "json"] %>% 
+  paste0("data/", .) %>%
+  lapply(fromJSON) %>% 
+  rbindlist() %>% 
+  as_tibble %>% 
   clean_names %>% 
   mutate(
     end_time = as.POSIXct(end_time),
@@ -54,6 +59,7 @@ streaming_data_cleaned <- streaming_data %>%
 colours <- c("#1DB954", "#1F7062", "#1D382F", "#B3E251", "#40C8B1", "#FFFFFF",
   "#191414"
   )
+
 
 ```
 
@@ -94,6 +100,7 @@ streaming_data_cleaned %>%
   .$artist_name %>% 
   unique %>% 
   length
+
 
 ```
 
