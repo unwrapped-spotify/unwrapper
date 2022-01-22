@@ -5,3 +5,5 @@ lubridate
 ggplot2
 data.table
 ggthemes
+scales
+tools
