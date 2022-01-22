@@ -8,4 +8,4 @@ COPY unwrapper.Rmd /src/unwrapper.Rmd
 #COPY data.json /src/data.json
 WORKDIR /src
 CMD cp /src/unwrapper.Rmd /workspace/unwrapper.Rmd && \
-    R -e "rmarkdown::render('unwrapper.Rmd', output_file = '/workspace/output.html')"
+    R -e "rmarkdown::render('unwrapper.Rmd', output_file = '/workspace/output.pdf')"
